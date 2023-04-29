@@ -154,8 +154,18 @@ a {
   margin: auto;
 }
 
-footer {
-  margin-top: 44px;
+footer div {
+  height: 100%;
+  font-family: 'Rufina', sans-serif;
+  font-size: 14px;
+  display: flex;
+  align-content: center;
+  padding: 10px 20px;
+  color: rgb(255, 255, 255, 0.5);
+}
+
+.copyright {
+color: rgb(255, 255, 255, 0.8);
 }
 
 @media all and (max-width:700px) {
