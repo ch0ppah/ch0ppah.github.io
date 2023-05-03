@@ -17,7 +17,7 @@ header {
   color: #fff;
   min-height: 100vh;
   display: flex;
-  background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80');
+  background-image: url('https://images.unsplash.com/photo-1563089145-599997674d42?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80');
   background-size: cover;
   background-position: bottom center;
 
@@ -156,8 +156,10 @@ footer {
     margin: 44px auto;
   }
   .description {
-    font-size: 18px;
-  }
+    font-size: 16px;
+    padding: 0 20px;
+    font-family: Oxygen;
+ }
   img {
     height: 25vh;
   }
