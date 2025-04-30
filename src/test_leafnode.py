@@ -20,3 +20,6 @@ class TestLeafNode(unittest.TestCase):
         with self.assertRaises(ValueError):
             node = LeafNode("p", "")
             node.to_html()
+
+if __name__ == "__main__":
+    unittest.main()

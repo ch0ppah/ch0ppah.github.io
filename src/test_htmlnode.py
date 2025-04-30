@@ -31,3 +31,6 @@ class TestTextNode(unittest.TestCase):
         node = HTMLNode("tag", "value", "children", "props")
         expected = "HTMLNode(tag, value, children, props)"
         self.assertEqual(repr(node), expected)
+
+if __name__ == "__main__":
+    unittest.main()
