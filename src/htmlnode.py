@@ -19,3 +19,42 @@ class HTMLNode:
             props_str += f" {key}=\"{value}\""
 
         return props_str
+    
+class LeafNode(HTMLNode):
+    def __init__(self, tag, value, props=None):
+        super().__init__(tag, value, None, props)
+        if not isinstance(self.value, str) or not self.value:
+            raise ValueError("LeafNode must have a value")
+
+    def __repr__(self):
+        return f"LeafNode({self.tag}, {self.value}, {self.props})"
+    
+    def to_html(self):
+        if not isinstance(self.value, str) or not self.value:
+            raise ValueError("LeafNode must have a value")
+        if self.tag == None:
+            return self.value
+        
+        return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+    
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
+        if not isinstance(self.tag, str) or not self.tag:
+            raise ValueError("ParentNode must have tag")
+        if not isinstance(self.children, str) or not self.children:
+            raise ValueError("ParentNode must have children")
+
+    def __repr__(self):
+        return f"ParentNode({self.tag}, children: {self.children}, {self.props})"
+
+    def to_html(self):
+        if not isinstance(self.tag, str) or not self.tag:
+            raise ValueError("ParentNode must have tag")
+        if not isinstance(self.children, str) or not self.children:
+            raise ValueError("ParentNode must have children")
+
+        children_html = ""
+        for child in self.children:
+            children_html += child.to_html()
+        return f"<{self.tag}{self.props_to_html()}>{children_html}</{self.tag}>"
