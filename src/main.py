@@ -70,7 +70,7 @@ def generate_page(from_path, template_path, dest_path, basepath):
     html_string = markdown_to_html_node(markdown).to_html()
     title = extract_title(markdown)
     content = template.replace("{{ Title }}", title).replace("{{ Content }}", html_string)
-    content = content.replace("href=\"/", f"href\"{basepath}").replace("src=\"/", f"src\"{basepath}")
+    content = content.replace('href="/', 'href="' + basepath).replace('src="/', 'src="' + basepath)
     dest_dir = os.path.dirname(dest_path)
     os.makedirs(dest_dir, exist_ok=True)
     with open(dest_path, "w") as file:
