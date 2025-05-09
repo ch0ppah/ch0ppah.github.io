@@ -5,6 +5,10 @@ from pathlib import Path
 from block_markdown import markdown_to_html_node
 
 
+dir_path_static = "./static"
+dir_path_public = "./docs"
+dir_path_content = "./content"
+template_path = "./template.html"
 default_basepath = "/"
 
 def main():
@@ -12,16 +16,22 @@ def main():
     if len(sys.argv) > 1:
         basepath = sys.argv[1]
 
-    copy_directory("./static", "./docs")
-    generate_pages_recursive("./content", "./template.html", "./docs", basepath)
+    print("Deleting public directory...")
+    if os.path.exists(dir_path_public):
+        shutil.rmtree(dir_path_public)
 
-def copy_directory(source_dir, dest_dir):
+    print("Copying static files to public directory...")
+    copy_files_recursive(dir_path_static, dir_path_public)
+
+    print("Generating content...")
+    generate_pages_recursive(dir_path_content, template_path, dir_path_public, basepath)
+
+
+
+def copy_files_recursive(source_dir, dest_dir):
     # Removes destination directly, ensures clean copy
-    if os.path.exists(dest_dir):
-        shutil.rmtree(dest_dir)
-
-    # Creates destination directory
-    os.mkdir(dest_dir)
+    if not os.path.exists(dest_dir):
+        os.mkdir(dest_dir)
 
     # List all items in source directory
     items = os.listdir(source_dir)
@@ -31,17 +41,11 @@ def copy_directory(source_dir, dest_dir):
         # Structure filepaths in both directories
         source_path = os.path.join(source_dir, item)
         dest_path = os.path.join(dest_dir, item)
-
-        # copies item if it is a file
+        print(f" * Copied {source_path} to {dest_path}")
         if os.path.isfile(source_path):
-            shutil.copy(source_path, dest_dir)
-            # NON-ESSENTIAL: log path of copied file for debugging
-            print(f"Copied file: {source_path} to {dest_path}")
-
-        # Calls function recursively if item is a directory
+            shutil.copy(source_path, dest_path)
         else:
-            copy_directory(source_path, dest_path)
-            print(f"Copied directory: {source_path} to {dest_path}")
+            copy_files_recursive(source_path, dest_path)
 
 def extract_title(markdown):
     # Pull the h1 header and return it (first line starting with #)
