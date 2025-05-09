@@ -28,24 +28,18 @@ def main():
 
 
 
-def copy_files_recursive(source_dir, dest_dir):
-    # Removes destination directly, ensures clean copy
-    if not os.path.exists(dest_dir):
-        os.mkdir(dest_dir)
+def copy_files_recursive(source_dir_path, dest_dir_path):
+    if not os.path.exists(dest_dir_path):
+        os.mkdir(dest_dir_path)
 
-    # List all items in source directory
-    items = os.listdir(source_dir)
-
-    # Process items
-    for item in items:
-        # Structure filepaths in both directories
-        source_path = os.path.join(source_dir, item)
-        dest_path = os.path.join(dest_dir, item)
-        print(f" * Copied {source_path} to {dest_path}")
-        if os.path.isfile(source_path):
-            shutil.copy(source_path, dest_path)
+    for filename in os.listdir(source_dir_path):
+        from_path = os.path.join(source_dir_path, filename)
+        dest_path = os.path.join(dest_dir_path, filename)
+        print(f" * {from_path} -> {dest_path}")
+        if os.path.isfile(from_path):
+            shutil.copy(from_path, dest_path)
         else:
-            copy_files_recursive(source_path, dest_path)
+            copy_files_recursive(from_path, dest_path)
 
 def extract_title(markdown):
     # Pull the h1 header and return it (first line starting with #)
