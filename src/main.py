@@ -33,6 +33,21 @@ def copy_directory(source_dir, dest_dir):
             copy_directory(source_path, dest_path)
             print(f"Copied directory: {source_path} to {dest_path}")
 
+def extract_title(markdown):
+    # Pull the h1 header and return it (first line starting with #)
+    md_lines = markdown.splitlines()
 
+    for line in md_lines:
+        # Checks for the first line starting with a single #
+        # AND checks to make sure the title isn't empty after slicing off
+        # the '#' and stripping whitespace
+        if line.startswith("# "):
+            if len(line[2:].strip()) > 0:
+                # Returns line without the `# ` & stripped whitespace
+                return line[2:].strip()
+            else:
+                raise Exception("h1 header is empty")
+    
+    raise Exception("h1 header not found")
 
 main()
