@@ -74,9 +74,9 @@ def generate_page(from_path, template_path, dest_path, basepath):
     content = template.replace("{{ Title }}", title).replace("{{ Content }}", html_string)
     content = content.replace('href="/', 'href="' + basepath)
     content = content.replace('src="/', 'src="/' + basepath)
-    dest_dir = os.path.dirname(dest_path)
+    dest_dir_path = os.path.dirname(dest_path)
     if dest_dir_path != "":
-        os.makedirs(dest_dir, exist_ok=True)
+        os.makedirs(dest_dir_path, exist_ok=True)
     with open(dest_path, "w") as file:
         file.write(content)
 
