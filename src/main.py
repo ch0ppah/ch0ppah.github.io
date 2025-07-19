@@ -26,8 +26,6 @@ def main():
     print("Generating content...")
     generate_pages_recursive(dir_path_content, template_path, dir_path_public, basepath)
 
-
-
 def copy_files_recursive(source_dir_path, dest_dir_path):
     if not os.path.exists(dest_dir_path):
         os.mkdir(dest_dir_path)
@@ -41,42 +39,6 @@ def copy_files_recursive(source_dir_path, dest_dir_path):
         else:
             copy_files_recursive(from_path, dest_path)
 
-def extract_title(markdown):
-    # Pull the h1 header and return it (first line starting with #)
-    md_lines = markdown.splitlines()
-
-    for line in md_lines:
-        # Checks for the first line starting with a single #
-        # AND checks to make sure the title isn't empty after slicing off
-        # the '#' and stripping whitespace
-        if line.startswith("# "):
-            if len(line[2:].strip()) > 0:
-                # Returns line without the `# ` & stripped whitespace
-                return line[2:].strip()
-            else:
-                raise Exception("h1 header is empty")
-    
-    raise Exception("h1 header not found")
-
-def generate_page(from_path, template_path, dest_path, basepath):
-    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
-    markdown = open(from_path, "r")
-    with open(from_path) as file:
-        markdown = file.read()
-    with open(template_path) as file:
-        template = file.read()
-    
-    html_string = markdown_to_html_node(markdown).to_html()
-    title = extract_title(markdown)
-
-    content = template.replace("{{ Title }}", title).replace("{{ Content }}", html_string)
-    content = content.replace('href="/', f'href="{basepath}')
-    content = content.replace('src="/', f'src="{basepath}')
-    dest_dir_path = os.path.dirname(dest_path)
-    if dest_dir_path != "":
-        os.makedirs(dest_dir_path, exist_ok=True)
-    with open(dest_path, "w") as file:
-        file.write(content)
 
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     for filename in os.listdir(dir_path_content):
@@ -87,5 +49,39 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, bas
             generate_page(from_path, template_path, dest_path, basepath)
         else:
             generate_pages_recursive(from_path, template_path, dest_path, basepath)
+
+
+def generate_page(from_path, template_path, dest_path, basepath):
+    print(f" * {from_path} {template_path} -> {dest_path}")
+    from_file = open(from_path, "r")
+    markdown_content = from_file.read()
+    from_file.close()
+
+    template_file = open(template_path, "r")
+    template = template_file.read()
+    template_file.close()
+
+    node = markdown_to_html_node(markdown_content)
+    html = node.to_html()
+
+    title = extract_title(markdown_content)
+    template = template.replace("{{ Title }}", title)
+    template = template.replace("{{ Content }}", html)
+    template = template.replace('href="/', 'href="' + basepath)
+    template = template.replace('src="/', 'src="' + basepath)
+
+    dest_dir_path = os.path.dirname(dest_path)
+    if dest_dir_path != "":
+        os.makedirs(dest_dir_path, exist_ok=True)
+    to_file = open(dest_path, "w")
+    to_file.write(template)
+
+
+def extract_title(md):
+    lines = md.split("\n")
+    for line in lines:
+        if line.startswith("# "):
+            return line[2:]
+    raise ValueError("no title found")
 
 main()
